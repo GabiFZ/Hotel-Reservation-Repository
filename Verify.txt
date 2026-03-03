@@ -1,0 +1,42 @@
+For DevOps Lead - Verify the following:
+
+1.Install the current modified repository project files / Modify your existing repository with new information:
+    - docker-compose.yml
+    - src/Dockerfile
+    - pom.xml
+    - remove compose.yaml
+
+2.Instructions in Intellij terminal:
+git checkout feature/docker-setup
+git branch
+git status
+docker --version
+docker compose version
+docker build -t hotel-backend -f src/Dockerfile . //this will build the image
+docker compose -f docker-compose.yml up --build   //this will build postgres database container, frontend and backend containers
+
+3.Verify postgresql database container:
+docker ps                                         //should be 3 processes running, if not run docker compose down
+docker ps -a                                      //copy the CONTAINER ID with postgres:16-alpine IMAGE
+docker exec -it <postgres-container-id> psql -U myuser -d mydatabase
+SELECT 1
+\dn
+\q
+docker compose down
+
+4.Verify internal network:
+docker compose up --build -d
+docker network ls
+docker network inspect <NETWORK ID>
+docker ps                                   //copy the CONTAINER ID with nginx:alpine frontend IMAGE
+docker exec -it <CONTAINER ID> sh
+curl http://backend:8080/endpoint
+
+//Should print {"timestamp":"2026-03-03T12:02:45.176+00:00","status":404,"error":"Not Found","path":"/endpoint"}/ #
+
+exit
+docker compose down
+
+5.Update the existing hotel reservation docker code repositories with this updated version
+
+END - EPIC 1

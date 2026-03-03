@@ -16,6 +16,9 @@ services:
       retries: 20
 
   backend:
+    build:
+      context: .
+      dockerfile: src/Dockerfile
     image: hotel-reservation-repository-main-backend:latest
     environment:
       SERVER_PORT: 8080
@@ -29,12 +32,23 @@ services:
         condition: service_healthy
     networks:
       - internal_net
+      - edge_net
     ports:
       - "8080:8080"
+
+  frontend:
+    image: nginx:alpine
+    depends_on:
+      - backend
+    networks:
+      - edge_net
+    ports:
+      - "3000:80"
 
 networks:
   internal_net:
     internal: true
+  edge_net:
 
 volumes:
   pgdata:
