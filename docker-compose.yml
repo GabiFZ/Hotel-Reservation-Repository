@@ -16,6 +16,9 @@ services:
       retries: 20
 
   backend:
+    build:
+      context: .
+      dockerfile: src/Dockerfile
     image: hotel-reservation-repository-main-backend:latest
     environment:
       SERVER_PORT: 8080
