@@ -17,7 +17,7 @@ public class Room {
     private Long id;
 
     @Column(name = "room_type", nullable = false)
-    private String type;
+    private String roomType;
 
     @Column(name = "beds" , nullable = false)
     private int beds;
