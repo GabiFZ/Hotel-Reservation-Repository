@@ -1,4 +1,4 @@
-package com.spring.hotelreservationsystem.repository;
+package com.spring.hotelreservationsystem.repositories;
 
 import com.spring.hotelreservationsystem.models.Room;
 import com.spring.hotelreservationsystem.repositories.RoomRepository;
