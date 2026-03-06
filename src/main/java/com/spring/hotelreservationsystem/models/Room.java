@@ -28,7 +28,13 @@ public class Room {
     @Column(name = "status", nullable = false)
     private String status;
 
-
+    //Constructor without id (for tests or creation)
+    public Room(String roomType, int beds, double price, String status) {
+        this.roomType = roomType;
+        this.beds = beds;
+        this.price = price;
+        this.status = status;
+    }
 
 
 }
