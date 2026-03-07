@@ -1,9 +1,15 @@
-FROM --platform=linux/amd64 eclipse-temurin:17-jre-jammy
-
+FROM maven:3.9-eclipse-temurin-17-alpine AS build
 WORKDIR /app
 
-COPY target/*.jar app.jar
+COPY . .
+
+RUN chmod +x mvnw
+RUN ./mvnw clean package -DskipTests
+
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+
+COPY --from=build /app/target/*.jar app.jar
 
 EXPOSE 8080
-
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
