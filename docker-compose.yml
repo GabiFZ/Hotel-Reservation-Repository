@@ -36,7 +36,9 @@ services:
       - edge_net
 
   frontend:
-    image: nginx:alpine
+    build:
+      context: ../hotel-reservation-system-frontend   # calea către repo-ul frontend
+      dockerfile: Dockerfile                         # numele Dockerfile-ului tău
     depends_on:
       - backend
     ports:
