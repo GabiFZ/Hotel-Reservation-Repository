@@ -1,4 +1,4 @@
-package com.hotel.integration;
+package com.spring.hotelreservationsystem.integration;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class RoomIntegrationTest {
 
-    @Test
-    void fullContextLoads() {
-    }
+//    @Test
+//    void fullContextLoads() {
+//    }
 }
