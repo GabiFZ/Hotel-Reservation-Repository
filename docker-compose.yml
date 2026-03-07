@@ -2,47 +2,50 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: hotel_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: secret1234
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: secret
     volumes:
       - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - internal_net
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d hotel_db"]
+      test: ["CMD-SHELL", "pg_isready -U myuser -d mydatabase"]
       interval: 5s
       timeout: 3s
       retries: 20
-    networks:
-      - internal_net
 
   backend:
     build:
       context: .
       dockerfile: src/Dockerfile
+    image: hotel-reservation-repository-main-backend:latest
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/hotel_db
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: secret1234
+      SERVER_PORT: 8080
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/mydatabase
+      SPRING_DATASOURCE_USERNAME: myuser
+      SPRING_DATASOURCE_PASSWORD: secret
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_JPA_SHOW_SQL: "true"
-      SERVER_PORT: 8080
     depends_on:
       postgres:
         condition: service_healthy
-    ports:
-      - "8080:8080"
     networks:
       - internal_net
       - edge_net
+    ports:
+      - "8080:8080"
 
   frontend:
     image: nginx:alpine
     depends_on:
       - backend
-    ports:
-      - "3000:80"
     networks:
       - edge_net
+    ports:
+      - "3000:80"
 
 networks:
   internal_net:
