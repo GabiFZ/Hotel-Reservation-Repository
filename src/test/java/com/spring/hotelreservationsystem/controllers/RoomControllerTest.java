@@ -1,5 +1,7 @@
 package com.spring.hotelreservationsystem.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spring.hotelreservationsystem.HotelReservationSystemApplication;
 import com.spring.hotelreservationsystem.models.Room;
 import com.spring.hotelreservationsystem.repositories.RoomRepository;
 import org.junit.jupiter.api.Test;
@@ -14,9 +16,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.hamcrest.Matchers.*;
 
-@SpringBootTest
-@ActiveProfiles("test")
+@SpringBootTest(classes = HotelReservationSystemApplication.class)
 @AutoConfigureMockMvc
+@ActiveProfiles("test")
 class RoomControllerTest {
 
     @Autowired
@@ -24,6 +26,9 @@ class RoomControllerTest {
 
     @Autowired
     private RoomRepository roomRepository;
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     void testCRUDOperations() throws Exception {
@@ -66,4 +71,5 @@ class RoomControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
     }
+
 }

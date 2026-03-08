@@ -36,7 +36,7 @@ services:
       - edge_net
 
   frontend:
-    image: nginx:alpine
+    image: hotel-frontend
     depends_on:
       - backend
     ports:
