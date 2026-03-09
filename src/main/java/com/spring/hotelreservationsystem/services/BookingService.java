@@ -7,6 +7,8 @@ import com.spring.hotelreservationsystem.repositories.RoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class BookingService {
@@ -55,5 +57,9 @@ public class BookingService {
         existingBooking.setRoom(room);
 
         return bookingRepository.save(existingBooking);
+    }
+
+    public List<Booking> getAllBookings() {
+        return bookingRepository.findAll();
     }
 }
