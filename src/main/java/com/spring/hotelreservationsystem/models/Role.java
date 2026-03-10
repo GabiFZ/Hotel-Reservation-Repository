@@ -1,4 +1,4 @@
-package com.hotelreservation.model;
+package com.spring.hotelreservationsystem.models;
 
 public enum Role {
     MANAGER,

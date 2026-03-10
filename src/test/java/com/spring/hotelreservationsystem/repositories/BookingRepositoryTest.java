@@ -1,7 +1,6 @@
 package com.spring.hotelreservationsystem.repositories;
 
-import com.spring.hotelreservationsystem.models.Booking;
-import com.spring.hotelreservationsystem.models.Room;
+import com.spring.hotelreservationsystem.models.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -13,7 +12,7 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-@DataJpaTest( properties = "spring.config.name=application-test")
+@DataJpaTest(properties = "spring.config.name=application-test")
 @ActiveProfiles("test")
 public class BookingRepositoryTest {
 
@@ -23,10 +22,35 @@ public class BookingRepositoryTest {
     @Autowired
     private RoomRepository roomRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    private Booking createBooking(Room room, User user) {
+
+        Booking booking = new Booking();
+        booking.setUser(user);
+        booking.setRoom(room);
+        booking.setCheckInDate(LocalDate.now().plusDays(1));
+        booking.setCheckOutDate(LocalDate.now().plusDays(3));
+        booking.setStatus(BookingStatus.CONFIRMED);
+
+        return booking;
+    }
+
+    private User createUser() {
+
+        User user = new User();
+        user.setName("John Doe");
+        user.setEmail("john@email.com");
+        user.setRole(Role.CUSTOMER);
+        user.setPassword("password");
+
+        return userRepository.save(user);
+    }
+
     @Test
     void repositoryIsDetectedBySpring() {
-
-        assertNotNull(bookingRepository, "RoomRepository should be detected by Spring");
+        assertNotNull(bookingRepository);
     }
 
     @Test
@@ -35,22 +59,14 @@ public class BookingRepositoryTest {
         Room room = new Room("Single", 1, 100.0, "AVAILABLE");
         room = roomRepository.save(room);
 
-        Booking booking = new Booking();
-        booking.setFirstName("John");
-        booking.setLastName("Doe");
-        booking.setEmail("john@example.com");
-        booking.setRoom(room);
-        booking.setCheckInDate(LocalDate.now());
-        booking.setCheckOutDate(LocalDate.now().plusDays(2));
-        booking.setStatus("RESERVED");
-        booking.setPrice(200.0);
+        User user = createUser();
+
+        Booking booking = createBooking(room, user);
 
         Booking savedBooking = bookingRepository.save(booking);
 
         assertNotNull(savedBooking.getId());
-        assertEquals("John", savedBooking.getFirstName());
-        assertEquals("Doe", savedBooking.getLastName());
-
+        assertEquals(user.getId(), savedBooking.getUser().getId());
     }
 
     @Test
@@ -59,24 +75,16 @@ public class BookingRepositoryTest {
         Room room = new Room("Double", 2, 150.0, "AVAILABLE");
         room = roomRepository.save(room);
 
-        Booking booking = new Booking();
-        booking.setFirstName("Ana");
-        booking.setLastName("Maria");
-        booking.setEmail("ana@example.com");
-        booking.setRoom(room);
-        booking.setCheckInDate(LocalDate.now());
-        booking.setCheckOutDate(LocalDate.now().plusDays(3));
-        booking.setStatus("RESERVED");
-        booking.setPrice(450.0);
+        User user = createUser();
 
+        Booking booking = createBooking(room, user);
         Booking savedBooking = bookingRepository.save(booking);
 
-        Booking foundBooking = bookingRepository.findById(savedBooking.getId()).orElse(null);
+        Booking foundBooking =
+                bookingRepository.findById(savedBooking.getId()).orElse(null);
 
         assertNotNull(foundBooking);
-        assertEquals("Ana", foundBooking.getFirstName());
-        assertEquals("Maria", foundBooking.getLastName());
-
+        assertEquals(savedBooking.getId(), foundBooking.getId());
     }
 
     @Test
@@ -85,16 +93,9 @@ public class BookingRepositoryTest {
         Room room = new Room("Suite", 3, 300.0, "AVAILABLE");
         room = roomRepository.save(room);
 
-        Booking booking = new Booking();
-        booking.setFirstName("Mike");
-        booking.setLastName("Daniel");
-        booking.setEmail("mike@example.com");
-        booking.setRoom(room);
-        booking.setCheckInDate(LocalDate.now());
-        booking.setCheckOutDate(LocalDate.now().plusDays(1));
-        booking.setStatus("RESERVED");
-        booking.setPrice(300.0);
+        User user = createUser();
 
+        Booking booking = createBooking(room, user);
         Booking savedBooking = bookingRepository.save(booking);
 
         bookingRepository.deleteById(savedBooking.getId());
@@ -102,7 +103,6 @@ public class BookingRepositoryTest {
         boolean exists = bookingRepository.findById(savedBooking.getId()).isPresent();
 
         assertFalse(exists);
-
     }
 
     @Test
@@ -111,35 +111,14 @@ public class BookingRepositoryTest {
         Room room = new Room("Suite", 3, 300.0, "AVAILABLE");
         room = roomRepository.save(room);
 
-        Booking booking1 = new Booking();
-        booking1.setFirstName("Mike");
-        booking1.setLastName("Daniel");
-        booking1.setEmail("mike@example.com");
-        booking1.setRoom(room);
-        booking1.setCheckInDate(LocalDate.now());
-        booking1.setCheckOutDate(LocalDate.now().plusDays(1));
-        booking1.setStatus("RESERVED");
-        booking1.setPrice(300.0);
+        User user = createUser();
 
-        Booking booking2 = new Booking();
-        booking2.setFirstName("Ana");
-        booking2.setLastName("Maria");
-        booking2.setEmail("anna@example.com");
-        booking2.setRoom(room);
-        booking2.setCheckInDate(LocalDate.now());
-        booking2.setCheckOutDate(LocalDate.now().plusDays(2));
-        booking2.setStatus("RESERVED");
-        booking2.setPrice(600.0);
-
-        bookingRepository.save(booking1);
-        bookingRepository.save(booking2);
+        bookingRepository.save(createBooking(room, user));
+        bookingRepository.save(createBooking(room, user));
 
         List<Booking> bookings = bookingRepository.findAll();
 
         assertEquals(2, bookings.size());
-
-        bookings.forEach(b -> System.out.println(b));
-
-        assertThat(roomRepository.findAll()).isNotEmpty();
+        assertThat(bookings).isNotEmpty();
     }
 }

@@ -1,4 +1,4 @@
-package com.hotelreservation.model;
+package com.spring.hotelreservationsystem.models;
 
 import jakarta.persistence.*;
 
@@ -10,28 +10,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private Role role;
 
-    @Column(nullable = false)
     private String password;
 
-    public User() {
-    }
-
-    public User(String name, String email, Role role, String password) {
-        this.name = name;
-        this.email = email;
-        this.role = role;
-        this.password = password;
-    }
+    public User() {}
 
     public Long getId() {
         return id;

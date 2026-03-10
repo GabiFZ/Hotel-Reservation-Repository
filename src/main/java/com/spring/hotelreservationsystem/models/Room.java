@@ -36,5 +36,20 @@ public class Room {
         this.status = status;
     }
 
+    public String getRoomType() {
+        return roomType;
+    }
+
+    public int getBeds() {
+        return beds;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public String getStatus() {
+        return status;
+    }
 
 }
