@@ -40,7 +40,7 @@ class RoomControllerTest {
             {"roomType":"Single","beds":1,"price":50.0,"status":"Available"}
             """;
 
-        mockMvc.perform(post("/rooms").contentType(MediaType.APPLICATION_JSON).content(roomJson))
+        mockMvc.perform(post("/api/rooms").contentType(MediaType.APPLICATION_JSON).content(roomJson))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.roomType").value("Single"));
@@ -48,7 +48,7 @@ class RoomControllerTest {
         Long roomId = roomRepository.findAll().get(0).getId();
 
         //GET /rooms
-        mockMvc.perform(get("/rooms"))
+        mockMvc.perform(get("/api/rooms"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)));
 
@@ -57,17 +57,17 @@ class RoomControllerTest {
             {"roomType":"Double","beds":2,"price":80.0,"status":"Occupied"}
             """;
 
-        mockMvc.perform(put("/rooms/" + roomId).contentType(MediaType.APPLICATION_JSON).content(updatedJson))
+        mockMvc.perform(put("/api/rooms/" + roomId).contentType(MediaType.APPLICATION_JSON).content(updatedJson))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.beds").value(2))
                 .andExpect(jsonPath("$.price").value(80.0));
 
         //DELETE /rooms/{id}
-        mockMvc.perform(delete("/rooms/" + roomId))
+        mockMvc.perform(delete("/api/rooms/" + roomId))
                 .andExpect(status().isNoContent());
 
         //Verify deletion
-        mockMvc.perform(get("/rooms"))
+        mockMvc.perform(get("/api/rooms"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(0)));
     }
