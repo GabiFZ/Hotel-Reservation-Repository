@@ -1,4 +1,5 @@
 package com.spring.hotelreservationsystem.dto;
 
-public class RoomDTO {
+public class BookingDTO{
+
 }

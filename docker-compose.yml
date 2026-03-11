@@ -36,9 +36,7 @@ services:
       - edge_net
 
   frontend:
-    build:
-      context: ../hotel-reservation-system-frontend   # calea către repo-ul frontend
-      dockerfile: Dockerfile                         # numele Dockerfile-ului tău
+    image: hotel-frontend #asta e numele imaginii create de docker in frontend
     depends_on:
       - backend
     ports:

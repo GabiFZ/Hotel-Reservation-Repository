@@ -5,7 +5,7 @@ import com.spring.hotelreservationsystem.repositories.RoomRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-
+import org.springframework.test.context.ActiveProfiles;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -13,7 +13,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-@DataJpaTest( properties = "spring.config.name=application-test")
+@DataJpaTest
+@ActiveProfiles("test")
 class RoomRepositoryTest {
 
     @Autowired

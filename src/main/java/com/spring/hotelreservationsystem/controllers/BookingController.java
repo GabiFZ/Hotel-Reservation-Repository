@@ -1,41 +1,31 @@
 package com.spring.hotelreservationsystem.controllers;
 
-
 import com.spring.hotelreservationsystem.models.Booking;
-import com.spring.hotelreservationsystem.models.Room;
 import com.spring.hotelreservationsystem.services.BookingService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/bookings")
 public class BookingController {
 
     private final BookingService bookingService;
 
-    //GET /bookings
-    @GetMapping
-    public ResponseEntity<List<Booking>> getAllBooking() {
-//        return bookingService.getAllBookings();
-        List<Booking> bookings = bookingService.getAllBookings();
-        //    return new ResponseEntity<>(bookings, HttpStatus.OK);
-        return ResponseEntity.ok(bookings);
-
+    public BookingController(BookingService bookingService) {
+        this.bookingService = bookingService;
     }
 
-    // TODO: Standardize REST responses using ResponseEntity and proper HTTP status codes (200 OK, 201 CREATED, 204 NO CONTENT, ETC)
+    // GET /bookings
+    @GetMapping
+    public List<Booking> getAllBookings() {
+        return bookingService.getAllBookings();
+    }
 
-
-    // POST /bookings/{roomId}
-    @PostMapping("/{roomId}")
-    public Booking createBooking(@PathVariable Long roomId, @RequestBody Booking booking) {
-        return bookingService.createBooking(roomId, booking);
+    // POST /bookings
+    @PostMapping
+    public Booking createBooking(@RequestBody Booking booking) {
+        return bookingService.createBooking(booking);
     }
 
     // PUT /bookings/{id}
