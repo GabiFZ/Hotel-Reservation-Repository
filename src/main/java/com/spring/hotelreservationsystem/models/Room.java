@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,6 +30,9 @@ public class Room {
     @Column(name = "status", nullable = false)
     private String status;
 
+    @OneToMany(mappedBy = "room")
+    private List<Booking> bookings;
+
     //Constructor without id (for tests or creation)
     public Room(String roomType, int beds, double price, String status) {
         this.roomType = roomType;
@@ -36,5 +41,20 @@ public class Room {
         this.status = status;
     }
 
+    public String getRoomType() {
+        return roomType;
+    }
+
+    public int getBeds() {
+        return beds;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public String getStatus() {
+        return status;
+    }
 
 }
