@@ -12,6 +12,7 @@ services:
       interval: 5s
       timeout: 3s
       retries: 20
+    restart: unless-stopped
     networks:
       - internal_net
 
@@ -29,6 +30,13 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/rooms || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
     ports:
       - "8080:8080"
     networks:
@@ -36,9 +44,17 @@ services:
       - edge_net
 
   frontend:
-    image: hotel-frontend #asta e numele imaginii create de docker in frontend
+    image: nginx:alpine
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:80 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    restart: unless-stopped
     ports:
       - "3000:80"
     networks:
