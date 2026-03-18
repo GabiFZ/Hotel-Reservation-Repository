@@ -31,7 +31,7 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: ["CMD-SHELL", "wget -qO- http://localhost:${SERVER_PORT}/rooms || exit 1"]
+      test: ["CMD-SHELL", "wget -qO- http://localhost:${SERVER_PORT}/api/rooms || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 10
@@ -44,7 +44,7 @@ services:
       - edge_net
 
   frontend:
-    image: nginx:alpine
+    image: hotel-frontend
     depends_on:
       backend:
         condition: service_healthy
