@@ -1,6 +1,6 @@
 package com.spring.hotelreservationsystem.security;
 
-import com.spring.hotelreservationsystem.config.UserDetailService;
+import com.spring.hotelreservationsystem.security.UserDetailService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
