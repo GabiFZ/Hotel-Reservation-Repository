@@ -1,4 +1,4 @@
-package com.spring.hotelreservationsystem.config;
+package com.spring.hotelreservationsystem.security;
 
 import com.spring.hotelreservationsystem.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
