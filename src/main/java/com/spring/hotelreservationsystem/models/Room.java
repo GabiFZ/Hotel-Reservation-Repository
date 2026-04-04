@@ -1,5 +1,6 @@
 package com.spring.hotelreservationsystem.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,6 +37,7 @@ public class Room {
     private String status;
 
     @OneToMany(mappedBy = "room")
+    @JsonManagedReference
     private List<Booking> bookings;
 
     //Constructor without id (for tests or creation)

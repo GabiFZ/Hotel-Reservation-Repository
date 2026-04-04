@@ -1,5 +1,5 @@
 package com.spring.hotelreservationsystem.models;
-
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -17,6 +17,7 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn(name = "room_id")
+    @JsonBackReference
     private Room room;
 
     private LocalDate checkInDate;
