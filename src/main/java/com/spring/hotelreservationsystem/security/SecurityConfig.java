@@ -25,23 +25,26 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth //temporary fix, all endpoints are public
+
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/manager/**").hasRole("MANAGER")
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/availability/**").permitAll()
-                        .requestMatchers("/api/rooms/**").permitAll()
-                        .requestMatchers("/api/bookings/**").authenticated()
-                        .requestMatchers("/api/manager/**").hasRole("MANAGER")
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session ->
-                        session.sessionCreationPolicy(
-                                SessionCreationPolicy.STATELESS
-                        )
+
+                // ✅ THIS FIXES 403 → 401
+                .anonymous(anon -> anon.disable())
+
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((req, res, ex2) -> res.sendError(401))
                 )
-                .addFilterBefore(
-                        jwtFilter,
-                        UsernamePasswordAuthenticationFilter.class
-                );
+
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

@@ -30,6 +30,11 @@ public class BookingService {
     }
 
     public Booking createBooking(BookingRequestDTO dto) {
+
+        if (dto == null || dto.getUserId() == null || dto.getRoomId() == null) {
+            throw new IllegalArgumentException("User ID and Room ID are required");
+        }
+
         User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
